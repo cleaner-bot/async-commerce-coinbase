@@ -16,7 +16,7 @@ class Event(typing.TypedDict):
 
 
 def verify_webhook(body: str | bytes, secret: str, signature: str) -> Event:
-    if hasattr(body, "encode"):
+    if isinstance(body, str):
         body = body.encode()
 
     mac = hmac.digest(secret.encode(), body, "sha256")
