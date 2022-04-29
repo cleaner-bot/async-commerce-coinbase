@@ -4,7 +4,7 @@ from pathlib import Path
 from async_commerce_coinbase import __version__
 
 setup(
-    name="async_coinbase",
+    name="async_commerce_coinbase",
     version=__version__,
     url="https://github.com/cleaner-bot/async-commerce-coinbase",
     author="Leo Developer",
