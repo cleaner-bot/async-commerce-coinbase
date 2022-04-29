@@ -31,7 +31,7 @@ class Event(typing.TypedDict):
     data: Charge | PartialCharge | Invoice
 
 
-def verify_webhook(body: str | bytes, secret: str, signature: str) -> Event:
+def verify_signature(body: str | bytes, signature: str, secret: str) -> Event:
     if isinstance(body, str):
         body = body.encode()
 
