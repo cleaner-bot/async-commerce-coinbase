@@ -11,6 +11,6 @@ setup(
     author_email="git@leodev.xyz",
     description="async coinbase commerce api",
     install_requires=Path("requirements.txt").read_text().splitlines(),
-    packages=find_namespace_packages(include=["async-commerce-coinbase*"]),
-    package_data={"async-commerce-coinbase": ["py.typed"]},
+    packages=find_namespace_packages(include=["async_commerce_coinbase*"]),
+    package_data={"async_commerce_coinbase": ["py.typed"]},
 )
