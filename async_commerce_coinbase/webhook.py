@@ -4,15 +4,31 @@ import typing
 
 from .exceptions import SignatureVerificationError
 from .resources.charge import Charge, PartialCharge
+from .resources.invoice import Invoice
+
+EventType = (
+    typing.Literal["charge:confirmed"]
+    | typing.Literal["charge:created"]
+    | typing.Literal["charge:delayed"]
+    | typing.Literal["charge:failed"]
+    | typing.Literal["charge:pending"]
+    | typing.Literal["charge:resolved"]
+    | typing.Literal["invoice:created"]
+    | typing.Literal["invoice:paid"]
+    | typing.Literal["invoice:payment_pending"]
+    | typing.Literal["invoice:unresolved"]
+    | typing.Literal["invoice:viewed"]
+    | typing.Literal["invoice:voided"]
+)
 
 
 class Event(typing.TypedDict):
     id: str
     resource: typing.Literal["event"]
-    type: str
+    type: EventType
     api_version: str
     created_at: str
-    data: Charge | PartialCharge
+    data: Charge | PartialCharge | Invoice
 
 
 def verify_webhook(body: str | bytes, secret: str, signature: str) -> Event:
