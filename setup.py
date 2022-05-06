@@ -1,7 +1,7 @@
 from setuptools import setup, find_namespace_packages  # type: ignore
 from pathlib import Path
 
-from async_commerce_coinbase import __version__
+from async_commerce_coinbase.__about__ import __version__
 
 setup(
     name="async_commerce_coinbase",
