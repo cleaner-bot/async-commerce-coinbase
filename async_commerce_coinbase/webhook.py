@@ -6,20 +6,20 @@ from .exceptions import SignatureVerificationError
 from .resources.charge import Charge, PartialCharge
 from .resources.invoice import Invoice
 
-EventType = (
-    typing.Literal["charge:confirmed"]
-    | typing.Literal["charge:created"]
-    | typing.Literal["charge:delayed"]
-    | typing.Literal["charge:failed"]
-    | typing.Literal["charge:pending"]
-    | typing.Literal["charge:resolved"]
-    | typing.Literal["invoice:created"]
-    | typing.Literal["invoice:paid"]
-    | typing.Literal["invoice:payment_pending"]
-    | typing.Literal["invoice:unresolved"]
-    | typing.Literal["invoice:viewed"]
-    | typing.Literal["invoice:voided"]
-)
+EventType = typing.Literal[
+    "charge:confirmed",
+    "charge:created",
+    "charge:delayed",
+    "charge:failed",
+    "charge:pending",
+    "charge:resolved",
+    "invoice:created",
+    "invoice:paid",
+    "invoice:payment_pending",
+    "invoice:unresolved",
+    "invoice:viewed",
+    "invoice:voided",
+]
 
 
 class Event(typing.TypedDict):
