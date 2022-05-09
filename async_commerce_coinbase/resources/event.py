@@ -4,11 +4,10 @@ import typing
 
 import httpx
 
-from .charge import PartialCharge
 from ..abc import AbstractRequestBase
 from ..exceptions import CoinbaseHTTPError
 from ..paginator import CoinbasePaginator
-
+from .charge import PartialCharge
 
 __all__ = ["Event", "CoinbaseEventResource"]
 

@@ -4,11 +4,10 @@ import typing
 
 import httpx
 
-from .types import PricingType, Price
 from ..abc import AbstractRequestBase
 from ..exceptions import CoinbaseHTTPError
 from ..paginator import CoinbasePaginator
-
+from .types import Price, PricingType
 
 __all__ = ["Checkout", "CoinbaseCheckoutResource"]
 

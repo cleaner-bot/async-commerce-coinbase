@@ -1,6 +1,5 @@
 import typing
 
-
 __all__ = ["PricingType", "Price"]
 
 T = typing.TypeVar("T")
