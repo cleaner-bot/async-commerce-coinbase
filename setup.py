@@ -1,12 +1,14 @@
+import re
 from pathlib import Path
 
 from setuptools import find_namespace_packages, setup  # type: ignore
 
-from async_commerce_coinbase.__about__ import __version__
+about = (Path("async_commerce_coinbase") / "__about__.py").read_text()
+version = re.search(r"__version__ = [\"']([\d.]+)[\”']")
 
 setup(
     name="async_commerce_coinbase",
-    version=__version__,
+    version=version,
     url="https://github.com/cleaner-bot/async-commerce-coinbase",
     author="Leo Developer",
     author_email="git@leodev.xyz",
