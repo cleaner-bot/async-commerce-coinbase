@@ -44,7 +44,7 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
         customer_name: str,
         memo: str,
         local_price: Price,
-    ):
+    ) -> Invoice:
         body = {
             "business_name": business_name,
             "customer_email": customer_email,
@@ -55,7 +55,7 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
         request = httpx.Request("POST", "/invoices", json=body)
         response = await self.request(request)
         body = response.json()
-        return body["data"]
+        return body["data"]  # type: ignore
 
     async def show_invoice(self, code_or_id: str) -> Invoice:
         if "/" in code_or_id:
@@ -64,7 +64,7 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
         request = httpx.Request("GET", f"/invoices/{code_or_id}")
         response = await self.request(request)
         body = response.json()
-        return body["data"]
+        return body["data"]  # type: ignore
 
     async def void_invoice(self, code_or_id: str) -> Invoice:
         if "/" in code_or_id:
@@ -73,7 +73,7 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
         request = httpx.Request("PUT", f"/invoices/{code_or_id}/void")
         response = await self.request(request)
         body = response.json()
-        return body["data"]
+        return body["data"]  # type: ignore
 
     async def resolve_invoice(self, code_or_id: str) -> Invoice:
         if "/" in code_or_id:
@@ -82,4 +82,4 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
         request = httpx.Request("PUT", f"/invoices/{code_or_id}/resolve")
         response = await self.request(request)
         body = response.json()
-        return body["data"]
+        return body["data"]  # type: ignore

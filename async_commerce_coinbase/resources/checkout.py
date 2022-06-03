@@ -33,7 +33,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         requested_info: list[str],
         pricing_type: PricingType,
         local_price: Price,
-    ):
+    ) -> Checkout:
         body = {
             "name": name,
             "description": description,
@@ -44,7 +44,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         request = httpx.Request("POST", "/charges", json=body)
         response = await self.request(request)
         body = response.json()
-        return body["data"]
+        return body["data"]  # type: ignore
 
     async def get_checkout(self, code_or_id: str) -> Checkout:
         if "/" in code_or_id:
@@ -53,15 +53,15 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         request = httpx.Request("GET", f"/checkouts/{code_or_id}")
         response = await self.request(request)
         body = response.json()
-        return body["data"]
+        return body["data"]  # type: ignore
 
     async def put_checkout(
         self,
         code_or_id: str,
         *,
-        name: str = None,
-        requested_info: list[str] = None,
-        local_price: Price = None,
+        name: str | None = None,
+        requested_info: list[str] | None = None,
+        local_price: Price | None = None,
     ) -> Price:
         if "/" in code_or_id:
             # small protection against arbitrary requests
@@ -76,7 +76,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         request = httpx.Request("PUT", f"/checkouts/{code_or_id}", json=body)
         response = await self.request(request)
         body = response.json()
-        return body["data"]
+        return body["data"]  # type: ignore
 
     async def delete_checkout(self, code_or_id: str) -> None:
         if "/" in code_or_id:

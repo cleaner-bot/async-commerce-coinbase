@@ -5,10 +5,11 @@ import httpx
 from .abc import AbstractRequestBase
 
 T = typing.TypeVar("T")
-Self = typing.TypeVar("Self", bound="CoinbasePaginator")
 
 
 class CoinbasePaginator(typing.Generic[T]):
+    Self = typing.TypeVar("Self", bound="CoinbasePaginator[T]")
+
     _starting_after: str | None | bool
     _ending_before: str | None
 
@@ -59,7 +60,7 @@ class CoinbasePaginator(typing.Generic[T]):
             _, end = pagination["cursor"]
             self._starting_after = end
 
-        return body["data"]
+        return body["data"]  # type: ignore
 
     async def all(self) -> typing.Sequence[T]:
         all: list[T] = []

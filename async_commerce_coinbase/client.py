@@ -18,7 +18,9 @@ class Coinbase(
 ):
     client: httpx.AsyncClient
 
-    def __init__(self, api_key: str, *, client: httpx.AsyncClient = None) -> None:
+    def __init__(
+        self, api_key: str, *, client: httpx.AsyncClient | None = None
+    ) -> None:
         if client is None:
             client = httpx.AsyncClient(base_url=COINBASE_BASE_URL)
 
