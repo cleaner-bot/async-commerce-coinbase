@@ -8,7 +8,8 @@ T = typing.TypeVar("T")
 
 
 class CoinbasePaginator(typing.Generic[T]):
-    Self = typing.TypeVar("Self", bound="CoinbasePaginator[T]")
+    if typing.TYPE_CHECKING:
+        Self = typing.TypeVar("Self", bound="CoinbasePaginator[T]")
 
     _starting_after: str | None | bool
     _ending_before: str | None
