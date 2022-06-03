@@ -13,6 +13,7 @@ jobs:
       matrix:
         python-version: ["3.10"]
 
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -30,6 +31,7 @@ jobs:
         run: make test
   
   lint:
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -47,6 +49,7 @@ jobs:
         run: make lint
 
   coverage:
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
