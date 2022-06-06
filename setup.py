@@ -4,11 +4,12 @@ from pathlib import Path
 from setuptools import find_namespace_packages, setup  # type: ignore
 
 about = (Path("async_commerce_coinbase") / "__about__.py").read_text()
-version = re.search(r"__version__ = [\"']([\d.]+)[\"']", about).group(1)
+version = re.search(r"__version__ = [\"']([\d.]+)[\"']", about)
+assert version
 
 setup(
     name="async_commerce_coinbase",
-    version=version,
+    version=version.group(1),
     url="https://github.com/cleaner-bot/async-commerce-coinbase",
     author="Leo Developer",
     author_email="git@leodev.xyz",
