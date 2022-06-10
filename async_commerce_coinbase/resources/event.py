@@ -32,4 +32,4 @@ class CoinbaseEventResource(AbstractRequestBase):
         request = httpx.Request("GET", f"/events/{code_or_id}")
         response = await self.request(request)
         body = response.json()
-        return body["data"]  # type: ignore
+        return typing.cast(Event, body["data"])

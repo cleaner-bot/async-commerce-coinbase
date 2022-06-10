@@ -63,7 +63,7 @@ class CoinbasePaginator(typing.Generic[T]):
             _, end = pagination["cursor"]
             self._starting_after = end
 
-        return body["data"]  # type: ignore
+        return typing.cast(typing.Sequence[T], body["data"])
 
     async def all(self) -> typing.Sequence[T]:
         all: list[T] = []

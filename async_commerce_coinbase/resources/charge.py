@@ -122,7 +122,7 @@ class CoinbaseChargeResource(AbstractRequestBase):
         request = httpx.Request("POST", "/charges", json=body)
         response = await self.request(request)
         response_body = response.json()
-        return response_body["data"]  # type: ignore
+        return typing.cast(PartialCharge, response_body["data"])
 
     async def get_charge(self, code_or_id: str) -> Charge:
         if "/" in code_or_id:
@@ -131,7 +131,7 @@ class CoinbaseChargeResource(AbstractRequestBase):
         request = httpx.Request("GET", f"/charges/{code_or_id}")
         response = await self.request(request)
         body = response.json()
-        return body["data"]  # type: ignore
+        return typing.cast(Charge, body["data"])
 
     async def cancel_charge(self, code_or_id: str) -> PartialCharge:
         if "/" in code_or_id:
@@ -140,7 +140,7 @@ class CoinbaseChargeResource(AbstractRequestBase):
         request = httpx.Request("POST", f"/charges/{code_or_id}/cancel")
         response = await self.request(request)
         body = response.json()
-        return body["data"]  # type: ignore
+        return typing.cast(PartialCharge, body["data"])
 
     async def resolve_charge(self, code_or_id: str) -> PartialCharge:
         if "/" in code_or_id:
@@ -149,4 +149,4 @@ class CoinbaseChargeResource(AbstractRequestBase):
         request = httpx.Request("POST", f"/charges/{code_or_id}/resolve")
         response = await self.request(request)
         body = response.json()
-        return body["data"]  # type: ignore
+        return typing.cast(PartialCharge, body["data"])

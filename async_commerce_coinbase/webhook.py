@@ -40,4 +40,4 @@ def verify_signature(body: str | bytes, signature: str, secret: str) -> Event:
     if not hmac.compare_digest(mac, signature_mac):
         raise SignatureVerificationError("signature mismatch")
     data = json.loads(body)
-    return data["event"]  # type: ignore
+    return typing.cast(Event, data["event"])

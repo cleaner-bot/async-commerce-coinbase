@@ -43,8 +43,8 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         }
         request = httpx.Request("POST", "/charges", json=body)
         response = await self.request(request)
-        body = response.json()
-        return body["data"]  # type: ignore
+        response_body = response.json()
+        return typing.cast(Checkout, response_body["data"])
 
     async def get_checkout(self, code_or_id: str) -> Checkout:
         if "/" in code_or_id:
@@ -53,7 +53,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         request = httpx.Request("GET", f"/checkouts/{code_or_id}")
         response = await self.request(request)
         body = response.json()
-        return body["data"]  # type: ignore
+        return typing.cast(Checkout, body["data"])
 
     async def put_checkout(
         self,
@@ -62,7 +62,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         name: str | None = None,
         requested_info: list[str] | None = None,
         local_price: Price | None = None,
-    ) -> Price:
+    ) -> Checkout:
         if "/" in code_or_id:
             # small protection against arbitrary requests
             raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
@@ -76,7 +76,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         request = httpx.Request("PUT", f"/checkouts/{code_or_id}", json=body)
         response = await self.request(request)
         body = response.json()
-        return body["data"]  # type: ignore
+        return typing.cast(Checkout, body["data"])
 
     async def delete_checkout(self, code_or_id: str) -> None:
         if "/" in code_or_id:
