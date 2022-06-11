@@ -41,7 +41,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
             "pricing_type": pricing_type,
             "local_price": local_price,
         }
-        request = httpx.Request("POST", "/charges", json=body)
+        request = httpx.Request("POST", "/checkouts", json=body)
         response = await self.request(request)
         return typing.cast(Checkout, response["data"])
 
