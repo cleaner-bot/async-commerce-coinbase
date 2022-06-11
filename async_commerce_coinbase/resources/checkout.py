@@ -51,7 +51,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         response = await self.request(request)
         return typing.cast(Checkout, response["data"])
 
-    async def put_checkout(
+    async def update_checkout(
         self,
         code_or_id: str,
         *,
