@@ -25,7 +25,7 @@ asyncio.run(main())
 
 webhook verification (fastapi)
 ```py
-from async_commerce_coinbase import webhook, exceptions
+from async_commerce_coinbase import webhook, CoinbaseSignatureVerificationError
 
 @app.post("/webhook")
 async def coinbase_webhook(request: Request):
@@ -36,7 +36,7 @@ async def coinbase_webhook(request: Request):
     payload = await request.body()
     try:
         event = webhook.verify_signature(payload, "webhook-secret", signature)
-    except exceptions.CoinbaseSignatureVerificationError:
+    except CoinbaseSignatureVerificationError:
         raise HTTPException(400, "Invalid signature")
     
     print(event)  # process event
