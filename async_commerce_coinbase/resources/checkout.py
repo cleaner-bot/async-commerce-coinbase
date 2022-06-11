@@ -68,7 +68,9 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         if local_price is not None:
             body["local_price"] = local_price
         if not body:
-            raise ValueError("must specify name, requested_info or local_price to overwrite")
+            raise ValueError(
+                "must specify name, requested_info or local_price to overwrite"
+            )
         request = httpx.Request("PUT", f"/checkouts/{code_or_id}", json=body)
         response = await self.request(request)
         return typing.cast(Checkout, response["data"])
