@@ -71,5 +71,5 @@ class Coinbase(
         return body
 
     def assert_code(self, code_or_id: str) -> None:
-        if "/" in code_or_id:
-            raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
+        if "/" in code_or_id or ".." in code_or_id:
+            raise ValueError(f"'/' found in code_or_id: {code_or_id!r}")
