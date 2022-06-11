@@ -46,9 +46,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         return typing.cast(Checkout, response["data"])
 
     async def get_checkout(self, code_or_id: str) -> Checkout:
-        if "/" in code_or_id:
-            # small protection against arbitrary requests
-            raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
+        self.assert_code(code_or_id)
         request = httpx.Request("GET", f"/checkouts/{code_or_id}")
         response = await self.request(request)
         return typing.cast(Checkout, response["data"])
@@ -61,9 +59,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         requested_info: list[str] | None = None,
         local_price: Price | None = None,
     ) -> Checkout:
-        if "/" in code_or_id:
-            # small protection against arbitrary requests
-            raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
+        self.assert_code(code_or_id)
         body: dict[str, typing.Any] = {}
         if name is not None:
             body["name"] = name
@@ -76,8 +72,6 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         return typing.cast(Checkout, response["data"])
 
     async def delete_checkout(self, code_or_id: str) -> None:
-        if "/" in code_or_id:
-            # small protection against arbitrary requests
-            raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
+        self.assert_code(code_or_id)
         request = httpx.Request("DELETE", f"/checkouts/{code_or_id}")
         await self.request(request)

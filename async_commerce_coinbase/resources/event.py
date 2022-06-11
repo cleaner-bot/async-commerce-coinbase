@@ -26,9 +26,7 @@ class CoinbaseEventResource(AbstractRequestBase):
         return CoinbasePaginator(self, "/events")
 
     async def show_events(self, code_or_id: str) -> Event:
-        if "/" in code_or_id:
-            # small protection against arbitrary requests
-            raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
+        self.assert_code(code_or_id)
         request = httpx.Request("GET", f"/events/{code_or_id}")
         response = await self.request(request)
         return typing.cast(Event, response["data"])

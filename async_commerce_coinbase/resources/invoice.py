@@ -57,25 +57,19 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
         return typing.cast(Invoice, response["data"])
 
     async def show_invoice(self, code_or_id: str) -> Invoice:
-        if "/" in code_or_id:
-            # small protection against arbitrary requests
-            raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
+        self.assert_code(code_or_id)
         request = httpx.Request("GET", f"/invoices/{code_or_id}")
         response = await self.request(request)
         return typing.cast(Invoice, response["data"])
 
     async def void_invoice(self, code_or_id: str) -> Invoice:
-        if "/" in code_or_id:
-            # small protection against arbitrary requests
-            raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
+        self.assert_code(code_or_id)
         request = httpx.Request("PUT", f"/invoices/{code_or_id}/void")
         response = await self.request(request)
         return typing.cast(Invoice, response["data"])
 
     async def resolve_invoice(self, code_or_id: str) -> Invoice:
-        if "/" in code_or_id:
-            # small protection against arbitrary requests
-            raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
+        self.assert_code(code_or_id)
         request = httpx.Request("PUT", f"/invoices/{code_or_id}/resolve")
         response = await self.request(request)
         return typing.cast(Invoice, response["data"])

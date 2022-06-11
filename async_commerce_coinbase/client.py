@@ -47,9 +47,9 @@ class Coinbase(
             raise CoinbaseHTTPError(
                 f"content-type is {content_type!r}, expected application/json"
             )
-        
+
         body = response.json()
-        
+
         if warnings := body.get("warnings"):
             for warning in warnings:
                 logger.debug(f"coinbase warning: {warning}")
@@ -59,7 +59,9 @@ class Coinbase(
         except httpx.HTTPStatusError as e:
             (reason,) = e.args
             if error := body.get("error", None):
-                if error_type := error.get("type") and (error_message := error.get("message")):
+                if (error_type := error.get("type")) and (
+                    error_message := error.get("message")
+                ):
                     reason = f"{error_type}: {error_message}\n{reason}"
 
             raise CoinbaseHTTPStatusError(
@@ -67,3 +69,7 @@ class Coinbase(
             )
 
         return body
+
+    def assert_code(self, code_or_id: str) -> None:
+        if "/" in code_or_id:
+            raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")

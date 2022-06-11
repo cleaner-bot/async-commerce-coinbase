@@ -124,25 +124,19 @@ class CoinbaseChargeResource(AbstractRequestBase):
         return typing.cast(PartialCharge, response["data"])
 
     async def get_charge(self, code_or_id: str) -> Charge:
-        if "/" in code_or_id:
-            # small protection against arbitrary requests
-            raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
+        self.assert_code(code_or_id)
         request = httpx.Request("GET", f"/charges/{code_or_id}")
         response = await self.request(request)
         return typing.cast(Charge, response["data"])
 
     async def cancel_charge(self, code_or_id: str) -> PartialCharge:
-        if "/" in code_or_id:
-            # small protection against arbitrary requests
-            raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
+        self.assert_code(code_or_id)
         request = httpx.Request("POST", f"/charges/{code_or_id}/cancel")
         response = await self.request(request)
         return typing.cast(PartialCharge, response["data"])
 
     async def resolve_charge(self, code_or_id: str) -> PartialCharge:
-        if "/" in code_or_id:
-            # small protection against arbitrary requests
-            raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
+        self.assert_code(code_or_id)
         request = httpx.Request("POST", f"/charges/{code_or_id}/resolve")
         response = await self.request(request)
         return typing.cast(PartialCharge, response["data"])
