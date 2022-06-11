@@ -31,5 +31,4 @@ class CoinbaseEventResource(AbstractRequestBase):
             raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
         request = httpx.Request("GET", f"/events/{code_or_id}")
         response = await self.request(request)
-        body = response.json()
-        return typing.cast(Event, body["data"])
+        return typing.cast(Event, response["data"])

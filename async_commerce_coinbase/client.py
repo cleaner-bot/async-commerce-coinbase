@@ -1,3 +1,6 @@
+import logging
+import typing
+
 import httpx
 
 from .exceptions import CoinbaseHTTPError, CoinbaseHTTPStatusError
@@ -6,6 +9,7 @@ from .resources.checkout import CoinbaseCheckoutResource
 from .resources.event import CoinbaseEventResource
 from .resources.invoice import CoinbaseInvoiceResource
 
+logger = logging.getLogger(__name__)
 COINBASE_VERSION = "2018-03-22"
 COINBASE_BASE_URL = "https://api.commerce.coinbase.com"
 
@@ -28,7 +32,7 @@ class Coinbase(
         client.headers["X-CC-Api-Key"] = api_key
         self.client = client
 
-    async def request(self, request: httpx.Request) -> httpx.Response:
+    async def request(self, request: httpx.Request) -> typing.Any:
         request = self.client.build_request(
             request.method,
             request.url,
@@ -37,26 +41,29 @@ class Coinbase(
             extensions=request.extensions,
         )
         response = await self.client.send(request)
-        try:
-            response.raise_for_status()
-        except httpx.HTTPStatusError as e:
-            (reason,) = e.args
-            if response.headers["content-type"].startswith("application/json"):
-                error = response.json().get("error", None)
-                if error is not None:
-                    error_type = error.get("type")
-                    error_message = error.get("message")
-                    if error_type is not None and error_message is not None:
-                        reason = f"{error_type}: {error_message}\n{reason}"
-
-            raise CoinbaseHTTPStatusError(
-                reason, request=e.request, response=e.response
-            )
 
         content_type = response.headers["content-type"]
         if not content_type.startswith("application/json"):
             raise CoinbaseHTTPError(
                 f"content-type is {content_type!r}, expected application/json"
             )
+        
+        body = response.json()
+        
+        if warnings := body.get("warnings"):
+            for warning in warnings:
+                logger.debug(f"coinbase warning: {warning}")
 
-        return response
+        try:
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
+            (reason,) = e.args
+            if error := body.get("error", None):
+                if error_type := error.get("type") and (error_message := error.get("message")):
+                    reason = f"{error_type}: {error_message}\n{reason}"
+
+            raise CoinbaseHTTPStatusError(
+                reason, request=e.request, response=e.response
+            )
+
+        return body

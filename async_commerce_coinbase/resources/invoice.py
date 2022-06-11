@@ -54,8 +54,7 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
         }
         request = httpx.Request("POST", "/invoices", json=body)
         response = await self.request(request)
-        response_body = response.json()
-        return typing.cast(Invoice, response_body["data"])
+        return typing.cast(Invoice, response["data"])
 
     async def show_invoice(self, code_or_id: str) -> Invoice:
         if "/" in code_or_id:
@@ -63,8 +62,7 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
             raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
         request = httpx.Request("GET", f"/invoices/{code_or_id}")
         response = await self.request(request)
-        body = response.json()
-        return typing.cast(Invoice, body["data"])
+        return typing.cast(Invoice, response["data"])
 
     async def void_invoice(self, code_or_id: str) -> Invoice:
         if "/" in code_or_id:
@@ -72,8 +70,7 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
             raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
         request = httpx.Request("PUT", f"/invoices/{code_or_id}/void")
         response = await self.request(request)
-        body = response.json()
-        return typing.cast(Invoice, body["data"])
+        return typing.cast(Invoice, response["data"])
 
     async def resolve_invoice(self, code_or_id: str) -> Invoice:
         if "/" in code_or_id:
@@ -81,5 +78,4 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
             raise CoinbaseHTTPError(f"'/' found in code_or_id: {code_or_id!r}")
         request = httpx.Request("PUT", f"/invoices/{code_or_id}/resolve")
         response = await self.request(request)
-        body = response.json()
-        return typing.cast(Invoice, body["data"])
+        return typing.cast(Invoice, response["data"])

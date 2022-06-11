@@ -53,9 +53,8 @@ class CoinbasePaginator(typing.Generic[T]):
             },
         )
         response = await self.coinbase.request(request)
-        body = response.json()
 
-        pagination = body["pagination"]
+        pagination = response["pagination"]
         if pagination["next_uri"] is None:
             # raise StopIteration on next anext call
             self._starting_after = False
@@ -63,7 +62,7 @@ class CoinbasePaginator(typing.Generic[T]):
             _, end = pagination["cursor"]
             self._starting_after = end
 
-        return typing.cast(typing.Sequence[T], body["data"])
+        return typing.cast(typing.Sequence[T], response["data"])
 
     async def all(self) -> typing.Sequence[T]:
         all: list[T] = []
