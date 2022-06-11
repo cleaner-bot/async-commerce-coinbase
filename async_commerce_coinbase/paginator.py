@@ -71,6 +71,6 @@ class CoinbasePaginator(typing.Generic[T]):
             all.extend(chunk)
         return all
 
-    async def chunk(self: Self, limit: int) -> Self:
+    def chunk(self: Self, limit: int) -> Self:
         self.limit = limit
         return self
