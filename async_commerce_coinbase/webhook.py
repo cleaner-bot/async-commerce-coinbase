@@ -31,13 +31,18 @@ class Event(typing.TypedDict):
     data: Charge | PartialCharge | Invoice
 
 
-def verify_signature(body: str | bytes, signature: str, secret: str) -> Event:
+def verify_signature(
+    body: str | bytes, signature: str | bytes, secret: str | bytes
+) -> Event:
     if isinstance(body, str):
         body = body.encode()
+    if isinstance(signature, str):
+        signature = bytes.fromhex(signature)
+    if isinstance(secret, str):
+        secret = secret.encode()
 
-    mac = hmac.digest(secret.encode(), body, "sha256")
-    signature_mac = bytes.fromhex(signature)
-    if not hmac.compare_digest(mac, signature_mac):
+    mac = hmac.digest(secret, body, "sha256")
+    if not hmac.compare_digest(mac, signature):
         raise SignatureVerificationError("signature mismatch")
     data = json.loads(body)
     return typing.cast(Event, data["event"])
