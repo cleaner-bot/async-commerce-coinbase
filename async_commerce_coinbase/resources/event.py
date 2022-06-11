@@ -25,7 +25,7 @@ class CoinbaseEventResource(AbstractRequestBase):
     def list_events(self) -> CoinbasePaginator[Event]:
         return CoinbasePaginator(self, "/events")
 
-    async def show_events(self, code_or_id: str) -> Event:
+    async def get_event(self, code_or_id: str) -> Event:
         self.assert_code(code_or_id)
         request = httpx.Request("GET", f"/events/{code_or_id}")
         response = await self.request(request)
