@@ -21,6 +21,31 @@ def test_paginator(paginator: CoinbasePaginator[str]) -> None:
 
 
 @pytest.mark.asyncio
+async def test_iter(paginator: CoinbasePaginator[str]) -> None:
+    paginator.coinbase.request.return_value = {  # type: ignore
+        "pagination": {"next_uri": None},
+        "data": ["foo", "bar"],
+    }
+
+    i = 0
+    async for item in paginator:
+        if i == 0:
+            assert item == "foo"
+        else:
+            assert item == "bar"
+        i += 1
+
+    assert i == 2
+
+    paginator.coinbase.request.assert_awaited_once()  # type: ignore
+    request = typing.cast(
+        httpx.Request, paginator.coinbase.request.await_args.args[0]  # type: ignore
+    )
+    assert request.method == "GET"
+    assert request.url == "/test?order=desc&limit=100&starting_after=&ending_before="
+
+
+@pytest.mark.asyncio
 async def test_all_single(paginator: CoinbasePaginator[str]) -> None:
     paginator.coinbase.request.return_value = {  # type: ignore
         "pagination": {"next_uri": None},
@@ -63,14 +88,22 @@ async def test_all_multiple(paginator: CoinbasePaginator[str]) -> None:
 async def test_chunk(paginator: CoinbasePaginator[str]) -> None:
     paginator.coinbase.request.return_value = {  # type: ignore
         "pagination": {"next_uri": None},
-        "data": ["foo", "bar"],
+        "data": ["foo", "bar"] * 10 + ["foo"],
     }
 
-    assert await paginator.chunk(10).all() == ["foo", "bar"]
+    i = 0
+    async for chunk in paginator.chunk(2):
+        if i < 10:
+            assert chunk == ["foo", "bar"]
+        else:
+            assert chunk == ["foo"]
+        i += 1
+
+    assert i == 11
 
     paginator.coinbase.request.assert_awaited_once()  # type: ignore
     request = typing.cast(
         httpx.Request, paginator.coinbase.request.await_args.args[0]  # type: ignore
     )
     assert request.method == "GET"
-    assert request.url == "/test?order=desc&limit=10&starting_after=&ending_before="
+    assert request.url == "/test?order=desc&limit=100&starting_after=&ending_before="

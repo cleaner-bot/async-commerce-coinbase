@@ -7,6 +7,7 @@ import httpx
 from .abc import AbstractRequestBase
 
 T = typing.TypeVar("T")
+MAX_LIMIT_PER_PAGE = 100
 
 
 class CoinbasePaginator(typing.Generic[T]):
@@ -15,6 +16,7 @@ class CoinbasePaginator(typing.Generic[T]):
 
     _starting_after: str | None | bool
     _ending_before: str | None
+    _pending: list[T]
 
     def __init__(
         self,
@@ -22,7 +24,7 @@ class CoinbasePaginator(typing.Generic[T]):
         url: str,
         *,
         order: str = "desc",
-        limit: int = 100
+        limit: int = MAX_LIMIT_PER_PAGE
     ) -> None:
         self.coinbase = coinbase
         self.url = url
@@ -32,14 +34,18 @@ class CoinbasePaginator(typing.Generic[T]):
 
         self._starting_after = None
         self._ending_before = None
+        self._pending = []
 
     def __aiter__(self: Self) -> Self:
         self._starting_after = None
         self._ending_before = None
+        self._pending.clear()
         return self
 
-    async def __anext__(self) -> typing.Sequence[T]:
-        if self._starting_after is False:
+    async def __anext__(self) -> T:
+        if self._pending:
+            return self._pending.pop(0)
+        elif self._starting_after is False:
             raise StopAsyncIteration
 
         request = httpx.Request(
@@ -62,14 +68,25 @@ class CoinbasePaginator(typing.Generic[T]):
             _, end = pagination["cursor"]
             self._starting_after = end
 
-        return typing.cast(typing.Sequence[T], response["data"])
+        self._pending.extend(typing.cast(typing.Sequence[T], response["data"]))
+        return self._pending.pop(0)
 
     async def all(self) -> typing.Sequence[T]:
         all: list[T] = []
-        async for chunk in self:
-            all.extend(chunk)
+        async for item in self:
+            all.append(item)
+            all.extend(self._pending)
+            self._pending.clear()
         return all
 
-    def chunk(self: Self, limit: int) -> Self:
-        self.limit = limit
-        return self
+    async def chunk(
+        self, chunk_size: int
+    ) -> typing.AsyncGenerator[typing.Sequence[T], None]:
+        chunk: list[T] = []
+        async for item in self:
+            chunk.append(item)
+            if len(chunk) >= chunk_size:
+                yield chunk[:chunk_size]
+                chunk = chunk[chunk_size:]
+        if chunk:
+            yield chunk
