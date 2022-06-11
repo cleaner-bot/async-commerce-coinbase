@@ -10,7 +10,7 @@ T = typing.TypeVar("T")
 
 
 class CoinbasePaginator(typing.Generic[T]):
-    if typing.TYPE_CHECKING:
+    if typing.TYPE_CHECKING:  # pragma: no cover
         Self = typing.TypeVar("Self", bound="CoinbasePaginator[T]")
 
     _starting_after: str | None | bool

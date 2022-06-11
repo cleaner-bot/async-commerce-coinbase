@@ -5,7 +5,6 @@ import typing
 import httpx
 
 from ..abc import AbstractRequestBase
-from ..exceptions import CoinbaseHTTPError
 from ..paginator import CoinbasePaginator
 from .charge import PartialCharge
 from .types import Price
@@ -56,7 +55,7 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
         response = await self.request(request)
         return typing.cast(Invoice, response["data"])
 
-    async def show_invoice(self, code_or_id: str) -> Invoice:
+    async def get_invoice(self, code_or_id: str) -> Invoice:
         self.assert_code(code_or_id)
         request = httpx.Request("GET", f"/invoices/{code_or_id}")
         response = await self.request(request)
