@@ -6,7 +6,7 @@ import httpx
 
 from ..abc import AbstractRequestBase
 from ..paginator import CoinbasePaginator
-from .types import Price, PricingType
+from .types import Money, PricingType
 
 __all__ = ["Checkout", "CoinbaseCheckoutResource"]
 
@@ -31,7 +31,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         description: str,
         requested_info: list[str],
         pricing_type: PricingType,
-        local_price: Price,
+        local_price: Money,
     ) -> Checkout:
         body = {
             "name": name,
@@ -56,7 +56,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         *,
         name: str | None = None,
         requested_info: list[str] | None = None,
-        local_price: Price | None = None,
+        local_price: Money | None = None,
     ) -> Checkout:
         self.assert_code(code_or_id)
         body: dict[str, typing.Any] = {}

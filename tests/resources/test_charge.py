@@ -6,7 +6,7 @@ import httpx
 import pytest
 
 from async_commerce_coinbase import Coinbase
-from async_commerce_coinbase.resources.types import Price
+from async_commerce_coinbase.resources.types import Money
 
 
 @pytest.fixture
@@ -49,7 +49,7 @@ class CreateChargeArguments(typing.TypedDict):
     name: str
     description: str
     pricing_type: typing.Literal["no_price", "fixed_price"]
-    local_price: Price
+    local_price: Money
     redirect_url: str
     cancel_url: str
     metadata: dict[str, str]

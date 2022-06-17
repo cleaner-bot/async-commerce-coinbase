@@ -6,7 +6,7 @@ import httpx
 import pytest
 
 from async_commerce_coinbase import Coinbase
-from async_commerce_coinbase.resources.types import Price
+from async_commerce_coinbase.resources.types import Money
 
 
 @pytest.fixture
@@ -48,7 +48,7 @@ class CreateInvoiceArguments(typing.TypedDict):
     customer_email: str
     customer_name: str
     memo: str
-    local_price: Price
+    local_price: Money
 
 
 @pytest.mark.asyncio

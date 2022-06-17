@@ -6,7 +6,7 @@ import httpx
 
 from ..abc import AbstractRequestBase
 from ..paginator import CoinbasePaginator
-from .types import Price, PricingType
+from .types import Money, PricingType
 
 __all__ = [
     "Charge",
@@ -35,9 +35,9 @@ class Charge(typing.TypedDict):
     timeline: list[TimelinePoint]
     metadata: dict[str, str]
     pricing_type: PricingType
-    pricing: dict[str, Price]
+    pricing: dict[str, Money]
     payment_threshold: PaymentThreshold
-    applied_threshold: Price
+    applied_threshold: Money
     applied_threshold_type: str
     payments: list[Payment]
     addresses: dict[str, str]
@@ -56,12 +56,21 @@ class PartialCharge(typing.TypedDict):
     timeline: list[TimelinePoint]
     metadata: dict[str, str]
     pricing_type: PricingType
-    pricing: dict[str, Price]
+    pricing: dict[str, Money]
     payments: list[Payment]
     payment_threshold: PaymentThreshold
     addresses: dict[str, str]
     redirect_url: str
     cancel_url: str
+    # undocumented
+    exchange_rates: dict[str, str]
+    local_exchange_rates: dict[str, str]
+    fees_settled: bool
+    offchain_eligible: bool
+    organization_name: str
+    pwcb_only: bool
+    support_email: str
+    utxo: bool
 
 
 class PartialCheckout(typing.TypedDict):
@@ -75,9 +84,9 @@ class TimelinePoint(typing.TypedDict, total=False):
 
 
 class PaymentThreshold(typing.TypedDict):
-    overpayment_absolute_threshold: Price
+    overpayment_absolute_threshold: Money
     overpayment_relative_threshold: float
-    underpayment_absolute_threshold: Price
+    underpayment_absolute_threshold: Money
     underpayment_relative_threshold: float
 
 
@@ -85,7 +94,7 @@ class Payment(typing.TypedDict):
     network: str
     tranction_id: str
     status: str  # TODO: be more specific
-    value: dict[str, Price]
+    value: dict[str, Money]
     block: BlockInfo
 
 
@@ -105,7 +114,7 @@ class CoinbaseChargeResource(AbstractRequestBase):
         name: str,
         description: str,
         pricing_type: PricingType,
-        local_price: Price,
+        local_price: Money,
         redirect_url: str,
         cancel_url: str,
         metadata: dict[str, str] | None = None,

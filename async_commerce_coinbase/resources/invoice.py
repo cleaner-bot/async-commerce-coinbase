@@ -7,7 +7,7 @@ import httpx
 from ..abc import AbstractRequestBase
 from ..paginator import CoinbasePaginator
 from .charge import PartialCharge
-from .types import Price
+from .types import Money
 
 __all__ = ["Invoice", "ChargeData", "CoinbaseInvoiceResource"]
 
@@ -21,7 +21,7 @@ class Invoice(typing.TypedDict):
     customer_name: str
     customer_email: str
     memo: str
-    local_price: Price
+    local_price: Money
     hosted_url: str
     created_at: str
     updated_at: str
@@ -42,7 +42,7 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
         customer_email: str,
         customer_name: str,
         memo: str,
-        local_price: Price,
+        local_price: Money,
     ) -> Invoice:
         body = {
             "business_name": business_name,
