@@ -55,13 +55,13 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
 
     async def update_checkout(
         self,
-        code_or_id: str,
+        id: str,
         *,
         name: str | None = None,
         requested_info: list[RequestedInfo] | None = None,
         local_price: Money | None = None,
     ) -> Checkout:
-        self.assert_code(code_or_id)
+        self.assert_code(id)
         body: dict[str, typing.Any] = {}
         if name is not None:
             body["name"] = name
@@ -73,11 +73,11 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
             raise ValueError(
                 "must specify name, requested_info or local_price to overwrite"
             )
-        request = httpx.Request("PUT", f"/checkouts/{code_or_id}", json=body)
+        request = httpx.Request("PUT", f"/checkouts/{id}", json=body)
         response = await self.request(request)
         return typing.cast(Checkout, response["data"])
 
-    async def delete_checkout(self, code_or_id: str) -> None:
-        self.assert_code(code_or_id)
-        request = httpx.Request("DELETE", f"/checkouts/{code_or_id}")
+    async def delete_checkout(self, id: str) -> None:
+        self.assert_code(id)
+        request = httpx.Request("DELETE", f"/checkouts/{id}")
         await self.request(request)
