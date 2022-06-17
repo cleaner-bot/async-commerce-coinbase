@@ -62,15 +62,6 @@ class PartialCharge(typing.TypedDict):
     addresses: dict[str, str]
     redirect_url: str
     cancel_url: str
-    # undocumented
-    exchange_rates: dict[str, str]
-    local_exchange_rates: dict[str, str]
-    fees_settled: bool
-    offchain_eligible: bool
-    organization_name: str
-    pwcb_only: bool
-    support_email: str
-    utxo: bool
 
 
 class PartialCheckout(typing.TypedDict):
