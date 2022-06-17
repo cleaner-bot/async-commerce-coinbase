@@ -29,7 +29,7 @@ async def test_create_checkout(coinbase: Coinbase) -> None:
         {
             "name": "name",
             "description": "description",
-            "requested_info": ["test123", "test456"],
+            "requested_info": ["name", "email"],
             "pricing_type": "fixed_price",
             "local_price": {"amount": 10, "currency": "TST"},
         },
@@ -46,7 +46,7 @@ async def test_create_checkout(coinbase: Coinbase) -> None:
 class CreateCheckoutArguments(typing.TypedDict):
     name: str
     description: str
-    requested_info: list[str]
+    requested_info: list[typing.Literal["name", "email"]]
     pricing_type: typing.Literal["no_price", "fixed_price"]
     local_price: Money
 
@@ -67,7 +67,7 @@ async def test_update_checkout(coinbase: Coinbase) -> None:
         await coinbase.update_checkout(
             "test",
             name="name",
-            requested_info=["abc", "def"],
+            requested_info=["name", "email"],
             local_price={"amount": 1337, "currency": "TST2"},
         )
     )["resource"] == "checkout"
