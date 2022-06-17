@@ -68,9 +68,10 @@ class PartialCheckout(typing.TypedDict):
     id: str
 
 
-class TimelinePoint(typing.TypedDict):
+class TimelinePoint(typing.TypedDict, total=False):
     time: str
-    status: str
+    status: typing.Literal["NEW", "PENDING", "COMPLETED", "EXPIRED", "UNRESOLVED", "RESOLVED", "CANCELED", "REFUND PENDING", "REFUNDED"]
+    context: str
 
 
 class PaymentThreshold(typing.TypedDict):
