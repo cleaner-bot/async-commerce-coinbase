@@ -16,7 +16,7 @@ class Invoice(typing.TypedDict):
     id: str
     resource: typing.Literal["invoice"]
     code: str
-    status: str  # TODO
+    status: typing.Literal["OPEN", "VIEWED", "PAID", "VOID"]
     business_name: str
     customer_name: str | None
     customer_email: str
