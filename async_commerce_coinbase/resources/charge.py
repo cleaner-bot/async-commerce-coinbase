@@ -93,7 +93,9 @@ class PaymentThreshold(typing.TypedDict):
 class Payment(typing.TypedDict):
     network: str
     tranction_id: str
-    status: str  # TODO: be more specific
+    # TODO: be more specific
+    # docs only contain "CONFIRMED"
+    status: str
     value: dict[str, Money]
     block: BlockInfo
 
