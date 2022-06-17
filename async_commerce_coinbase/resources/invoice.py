@@ -12,7 +12,7 @@ from .types import Money
 __all__ = ["Invoice", "ChargeData", "CoinbaseInvoiceResource"]
 
 
-class Invoice(typing.TypedDict):
+class Invoice(typing.TypedDict, total=False):
     id: str
     resource: typing.Literal["invoice"]
     code: str
@@ -25,7 +25,7 @@ class Invoice(typing.TypedDict):
     hosted_url: str
     created_at: str
     updated_at: str
-    charge: ChargeData
+    charge: ChargeData  # optional
 
 
 class ChargeData(typing.TypedDict):
