@@ -18,9 +18,9 @@ class Invoice(typing.TypedDict):
     code: str
     status: str  # TODO
     business_name: str
-    customer_name: str
+    customer_name: str | None
     customer_email: str
-    memo: str
+    memo: str | None
     local_price: Money
     hosted_url: str
     created_at: str
@@ -40,17 +40,20 @@ class CoinbaseInvoiceResource(AbstractRequestBase):
         self,
         business_name: str,
         customer_email: str,
-        customer_name: str,
-        memo: str,
         local_price: Money,
+        memo: str | None = None,
+        customer_name: str | None = None,
     ) -> Invoice:
         body = {
             "business_name": business_name,
             "customer_email": customer_email,
-            "customer_name": customer_name,
             "memo": memo,
             "local_price": local_price,
         }
+        if customer_name is not None:
+            body["customer_name"] = customer_name
+        if memo is not None:
+            body["memo"] = memo
         request = httpx.Request("POST", "/invoices", json=body)
         response = await self.request(request)
         return typing.cast(Invoice, response["data"])
