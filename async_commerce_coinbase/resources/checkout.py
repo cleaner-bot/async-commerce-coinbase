@@ -17,8 +17,11 @@ class Checkout(typing.TypedDict):
     name: str
     description: str
     logo_url: str
-    request_info: list[str]
+    requested_info: list[RequestedInfo]
     pricing_type: PricingType
+
+
+RequestedInfo = typing.Literal["name", "email"]
 
 
 class CoinbaseCheckoutResource(AbstractRequestBase):
@@ -29,7 +32,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         self,
         name: str,
         description: str,
-        requested_info: list[str],
+        requested_info: list[RequestedInfo],
         pricing_type: PricingType,
         local_price: Money,
     ) -> Checkout:
@@ -55,7 +58,7 @@ class CoinbaseCheckoutResource(AbstractRequestBase):
         code_or_id: str,
         *,
         name: str | None = None,
-        requested_info: list[str] | None = None,
+        requested_info: list[RequestedInfo] | None = None,
         local_price: Money | None = None,
     ) -> Checkout:
         self.assert_code(code_or_id)
