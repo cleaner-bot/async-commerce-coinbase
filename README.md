@@ -60,6 +60,8 @@ async def main():
 You can use the `webhook.verify_signature` API to verify the signature of
 the webhook body and get a fully type hinted response.
 
+Example using fastapi:
+
 ```py
 from async_commerce_coinbase import webhook, CoinbaseSignatureVerificationError
 
