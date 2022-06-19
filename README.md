@@ -118,7 +118,7 @@ print(charge["hosted_at"])
 # will be outdated or use get_charge() to refresh it
 # charge = await coinbase.get_charge(charge["id"])
 status = charge["timeline"][-1]["status"]
-if status == "UNRESEOLVED":
+if status == "UNRESOLVED":
     await coinbase.resolve_charge(charge["id"])
 elif stauts == "NEW":
     await coinbase.cancel_charge(charge["id"])
