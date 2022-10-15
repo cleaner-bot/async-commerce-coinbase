@@ -24,7 +24,7 @@ class CoinbasePaginator(typing.Generic[T]):
         url: str,
         *,
         order: str = "desc",
-        limit: int = MAX_LIMIT_PER_PAGE
+        limit: int = MAX_LIMIT_PER_PAGE,
     ) -> None:
         self.coinbase = coinbase
         self.url = url
