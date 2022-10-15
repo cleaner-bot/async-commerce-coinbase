@@ -86,7 +86,7 @@ async def test_update_checkout_without_arguments(coinbase: Coinbase) -> None:
 
 @pytest.mark.asyncio
 async def test_delete_checkout(coinbase: Coinbase) -> None:
-    assert await coinbase.delete_checkout("test") is None
+    assert await coinbase.delete_checkout("test") is None  # type: ignore
     request = typing.cast(
         httpx.Request, coinbase.request.await_args.args[0]  # type: ignore
     )
